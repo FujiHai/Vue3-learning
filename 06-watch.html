@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vue3-watch</title>
+</head>
+
+<body>
+  <div id="app">
+    <p>
+      Please ask a yes/no question?
+      <input v-model="question">
+    </p>
+    <p>{{ answer }}</p>
+    <img v-bind:src="imgUrl" width="100" height="100">
+  </div>
+
+  <script type="module">
+    import { createApp, ref, watch } from './js/vue.esm-browser.js'
+
+    createApp({
+      setup() {
+        const question = ref('')
+        const answer = ref('')
+        const imgUrl = ref('')
+
+        watch(question, async (newVal, oldVal) => {
+          const response = await fetch('https://www.yesno.wtf/api')
+          const data = await response.json()
+          answer.value = data.answer
+          imgUrl = data.image
+        })
+
+        return {
+          question,
+          answer,
+          imgUrl
+        }
+      }
+    }).mount('#app')
+  </script>
+</body>
+
+</html>

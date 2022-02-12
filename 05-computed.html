@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vue3-computed</title>
+</head>
+
+<body>
+  <div id="app">
+    <button @click="addPlan">Add Plan</button>
+    <p>unfinshed: {{ unfinshedCount }}</p>
+  </div>
+
+  <script type="module">
+    import { createApp, reactive, computed } from './js/vue.esm-browser.js'
+
+    const data = [
+      { name: 'Sport', isFinished: false },
+      { name: 'Read', isFinished: false },
+      { name: 'Eat', isFinished: true }
+    ]
+
+    createApp({
+      setup() {
+        const todos = reactive(data)
+
+        const unfinshedCount = computed(() => {
+          return todos.filter(item => !item.isFinished).length
+        })
+
+        return {
+          unfinshedCount,
+          addPlan: () => {
+            todos.push({
+              name: 'New Plan',
+              isFinished: false
+            })
+          }
+        }
+      }
+    }).mount('#app')
+  </script>
+</body>
+
+</html>

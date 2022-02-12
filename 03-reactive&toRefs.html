@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>vue3-reactive&toRefs</title>
+</head>
+
+<body>
+  <div id="app">
+    <h1>Mouse Position</h1>
+    <p>x: {{ x }}</p>
+    <p>y: {{ y }}</p>
+  </div>
+
+  <script type="module">
+    import { createApp, reactive, onMounted, onUnmounted, toRefs } from "./js/vue.esm-browser.js";
+
+    function useMousePosition() {
+      const position = reactive({
+        x: 0,
+        y: 0,
+      });
+
+      const update = e => {
+        position.x = e.pageX;
+        position.y = e.pageY;
+      }
+
+      onMounted(() => {
+        window.addEventListener('mousemove', update)
+      })
+
+      onUnmounted(() => {
+        window.removeEventListener('mousemove', update)
+      })
+
+      return toRefs(position);
+    }
+
+    createApp({
+      setup(props, context) {
+        // const position = useMousePosition()
+        const { x, y } = useMousePosition()
+
+        return {
+          x,
+          y
+        };
+      },
+      mounted() {
+        setTimeout(() => {
+          this.position.x = 100;
+        }, 2000);
+      },
+    }).mount('#app');
+  </script>
+</body>
+
+</html>
